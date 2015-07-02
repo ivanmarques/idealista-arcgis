@@ -29,7 +29,17 @@ angular.module('idealista-arcgis')
 
 
 
+        $scope.deletePoi = function(poiId){
+            var index = lodash.findIndex($scope.pois, {id:poiId});
+            if(index > -1){
+                $scope.pois.splice(index,1);
+                MapService.deletePoint(index);
+                console.dir($scope.results);
+                removePoiElements($scope.results, poiId);
+                console.dir($scope.results);
+            }
 
+        };
         // Método para lanzar la búsqueda sobre todos los POIs
         $scope.search = function(){
             $scope.waiting = true;
@@ -54,14 +64,10 @@ angular.module('idealista-arcgis')
 
                     $scope.waiting = false;
                     $scope.loadButton = "Buscar pisos";
-                    console.warn("q.all results");
-                    console.dir(result);
                     var resultCollection = joinResults(lodash.cloneDeep($scope.results), result);
 
                     //Get different points to add to the map
-
                     $scope.results =resultCollection;
-                    console.dir($scope.results);
                 },function(e){
                     alert("Ha sucedido un error al recuperar los pisos, por favor inténtalo de nuevo.");
                     $scope.waiting = false;
@@ -91,5 +97,11 @@ angular.module('idealista-arcgis')
                 collection = collection.concat(resutlEl);
             });
             return lodash.unique(collection,'url');
+        }
+
+        function removePoiElements(collection, poiId){
+            lodash.remove(collection, function(element){
+                return element.poiId === poiId;
+            });
         }
     });

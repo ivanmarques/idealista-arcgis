@@ -75,7 +75,11 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
         );
         symbol = (imagePath) ? new esriPictureMarkerSymbol(imagePath, 16, 24) : new esriPictureMarkerSymbol("img/pin.png", 16, 24);
         capaGrafica.add(new esriGraphic(loc, symbol, attrs));
-    }
+    };
+
+    this.deletePoint = function(i){
+        capaGrafica.remove(capaGrafica.graphics[i]);
+    };
     /*
      // Definimos un método delete(id) para eliminar un POI del mapa
      $scope.delete = function(id){

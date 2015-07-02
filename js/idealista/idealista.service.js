@@ -43,24 +43,14 @@ angular.module('idealista-arcgis')
             var deferred = $q.defer();
             $http(req)
                 .success(function(data, status, headers, config){
-                    console.log("ENDPOINTREQUEST SUCCESS");
-                    console.dir(data);
-                    console.dir(status);
-                    console.dir(headers);
-                    console.dir(config);
-                    var results = self.processResults(point.poiId,data);
+                    console.log(point);
+                    var results = self.processResults(point.id,data);
                     deferred.resolve(results);
                 })
                 .error(function(data, status, headers, config){
-                    console.log("Ha habido un error: "+ e);
-                    console.dir(data);
-                    console.dir(status);
-                    console.dir(headers);
-                    console.dir(config);
                     deferred.reject("Error en la petición");
                 });
-
-            // Devolvemos la promesa devuelta por el método esriRequest.
+            // Devolvemos la promesa
             // Más info sobre las prromesas y el objetos Deferred: http://bit.ly/1cKr1lR
             return deferred.promise;
         };
