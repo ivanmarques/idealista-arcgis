@@ -45,6 +45,7 @@ exports.start = function(done)
 	router.get('/proxy', views.proxy);
 	
 	app.use('/', router);
+	app.use("/build", express.static(__dirname + "/build"));
 	app.use("/img", express.static(__dirname + "/img"));
 	app.use("/css", express.static(__dirname + "/css"));
 	app.use("/js", express.static(__dirname + "/js"));

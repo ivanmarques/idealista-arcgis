@@ -9,7 +9,7 @@ var request = require('request'),
 function home(req,res)
 {
     //res.render(view, data);
-    res.sendFile(__dirname +"/templates/index.html");
+    res.sendFile(__dirname +"/build/index.html");
 }
 
 function proxy(req,res)
