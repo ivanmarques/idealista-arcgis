@@ -3,7 +3,7 @@
 
 angular.module('idealista-arcgis').service('MapService', function(esriRegistry, lodash, $rootScope) {
     this.test = esriRegistry;
-    var mapa, capaGrafica, esriGraphic, esriPoint, esriPictureMarkerSymbol, esriSimpleMarkerSymbol, evt = { click: {}};
+    var mapa, poiLayer, resultsLayer, esriGraphic, esriPoint, esriPictureMarkerSymbol, esriSimpleMarkerSymbol, evt = { click: {}};
 
     this.init = function (domId) {
         esriRegistry.get(domId).then(function (map) {
@@ -31,8 +31,10 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
                 esriSimpleMarkerSymbol = SimpleMarkerSymbol;
                 // Aquí creamos las capas y las metemos en la variable de entorno
                 // ($scope) para poder acceder luego desde fuera de la función
-                capaGrafica = new GraphicsLayer();
-                map.addLayer(capaGrafica);
+                poiLayer = new GraphicsLayer();
+                resultsLayer = GraphicsLayer();
+                map.addLayer(poiLayer);
+                map.addLayer(resultsLayer)
 
 
                 esriConfig.defaults.io.proxyUrl = "/proxy";
@@ -41,7 +43,7 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
                 var orangeRed = new Color([238, 69, 0, 0.5]);
                 $GEO.marker = new SimpleMarkerSymbol("solid", 10, null, orangeRed);
                 var renderer = new SimpleRenderer($GEO.marker);
-                capaGrafica.setRenderer(renderer);
+                poiLayer.setRenderer(renderer);
 
                 // Y asociamos un pequeño modal con información extra.
                 var template = new InfoTemplate(
@@ -51,7 +53,7 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
                     <img src='${thumbnail}'> <br>\
                     <a href='http://${url}' target='_blank'>Más info</a>"
                 );
-                capaGrafica.setInfoTemplate(template);
+                poiLayer.setInfoTemplate(template);
 
 
                 // Añadimos un marcados al hacer clic
@@ -74,17 +76,19 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
             coords.lat
         );
         symbol = (imagePath) ? new esriPictureMarkerSymbol(imagePath, 16, 24) : new esriPictureMarkerSymbol("img/pin.png", 16, 24);
-        capaGrafica.add(new esriGraphic(loc, symbol, attrs));
+        poiLayer.add(new esriGraphic(loc, symbol, attrs));
     };
 
-    this.deletePoint = function(i){
-        capaGrafica.remove(capaGrafica.graphics[i]);
+    this.removePoint = function(i){
+        poiLayer.remove(poiLayer.graphics[i]);
     };
+
+
     /*
      // Definimos un método delete(id) para eliminar un POI del mapa
      $scope.delete = function(id){
      var i = 0,
-     layer = $scope.capaGrafica,
+     layer = $scope.poiLayer,
      pois = $scope.pois,
      len = pois.length;
 
@@ -99,9 +103,14 @@ angular.module('idealista-arcgis').service('MapService', function(esriRegistry, 
      }
      };
      */
-    // Pintar resultados
+    // Vacía la capa gráfica y pinta los resultados
     this.paintResults = function (results) {
-
+        resultsLayer.clear();
+        var len = results.length;
+        while(--len >= 0){
+            var loc = new esriPoint(results[len].longitude, results[len].latitude);
+            resultsLayer.add(new esriGraphic(loc, $GEO.marker, results[len]));
+        }
     };
 });
 

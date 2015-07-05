@@ -1,6 +1,6 @@
 'use strict';
 angular.module('idealista-arcgis')
-    .service('IdealistaService', function($q, $http){
+    .service('IdealistaService', function($q, $http, lodash){
         var self = this;
         this.endPoint = "http://idealista-prod.apigee.net/public/2/search";
         this.sanitizeResults = function(result, currentResults){
@@ -64,4 +64,37 @@ angular.module('idealista-arcgis')
             }
             return data.elementList;
         };
+
+        this.joinResults = function (collection, fullCollection) {
+            angular.forEach(fullCollection, function(resutlEl){
+                collection = collection.concat(resutlEl);
+            });
+            return lodash.unique(collection,'url');
+        };
+
+        this.removePoiElements = function (collection, poiId) {
+            var self = this;
+            lodash.remove(collection, function(element){
+                if(Array.isArray(element)){
+                    self.removePoiElements(element, poiId);
+                }
+                return element.poiId === poiId;
+            });
+
+            //remove void arrays
+            var len = collection.length;
+            var toSplice = [];
+            while(--len >= 0){
+                if(Array.isArray(collection[len])) {
+                    if(collection[len].length == 0){
+                        toSplice.push(len);
+                    }
+                }
+            }
+            len = toSplice.length;
+            while(--len >= 0){
+                collection.splice(toSplice[len], 1);
+            }
+        }
+
     });

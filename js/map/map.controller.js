@@ -1,7 +1,11 @@
 angular.module('idealista-arcgis')
     .controller('MapController', function ($scope, lodash, MapService, IdealistaService, $rootScope, $q) {
+        //inicializamos el mapa pasándole el id del elemento donde se debe pintar
         MapService.init('map');
-        //Creamos el controlador (MapController)
+
+        // Variable para cachear todos los resultados de las peticiones, aunque luego solo se muestre el resultado de joinresults
+        var entireCollection = [];
+
         $scope.map = {
             center: {
                 lng: -3.709,
@@ -33,13 +37,14 @@ angular.module('idealista-arcgis')
             var index = lodash.findIndex($scope.pois, {id:poiId});
             if(index > -1){
                 $scope.pois.splice(index,1);
-                MapService.deletePoint(index);
-                console.dir($scope.results);
-                removePoiElements($scope.results, poiId);
-                console.dir($scope.results);
+                MapService.removePoint(index);
+                IdealistaService.removePoiElements(entireCollection, poiId);
+                $scope.results = [];
+                makeResultArray();
+                MapService.paintResults($scope.results);
             }
-
         };
+
         // Método para lanzar la búsqueda sobre todos los POIs
         $scope.search = function(){
             $scope.waiting = true;
@@ -64,10 +69,9 @@ angular.module('idealista-arcgis')
 
                     $scope.waiting = false;
                     $scope.loadButton = "Buscar pisos";
-                    var resultCollection = joinResults(lodash.cloneDeep($scope.results), result);
-
-                    //Get different points to add to the map
-                    $scope.results =resultCollection;
+                    entireCollection = result;
+                    makeResultArray();
+                    MapService.paintResults($scope.results);
                 },function(e){
                     alert("Ha sucedido un error al recuperar los pisos, por favor inténtalo de nuevo.");
                     $scope.waiting = false;
@@ -92,16 +96,13 @@ angular.module('idealista-arcgis')
         });
 
 
-        function joinResults(collection, result){
-            angular.forEach(result, function(resutlEl){
-                collection = collection.concat(resutlEl);
-            });
-            return lodash.unique(collection,'url');
-        }
 
-        function removePoiElements(collection, poiId){
-            lodash.remove(collection, function(element){
-                return element.poiId === poiId;
-            });
+
+
+
+        function makeResultArray(){
+            var resultCollection = IdealistaService.joinResults(lodash.cloneDeep($scope.results), entireCollection);
+            //Get different points to add to the map
+            $scope.results = resultCollection;
         }
     });
