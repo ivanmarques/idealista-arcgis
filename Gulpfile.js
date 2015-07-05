@@ -79,4 +79,4 @@ gulp.task('watch', function(){
     gulp.watch(routes.srcHtml, ['index']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['index', 'watch']);
