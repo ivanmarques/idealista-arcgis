@@ -18,6 +18,11 @@
     "angular-sanitize": "~1.4.1",
     "angular-route": "~1.4.1",
     "angular-esri-map": "~0.0.1-beta.1",
-    "ng-lodash": "~0.2.3"
+    "ng-lodash": "~0.2.3",
+    "bootstrap-sass-official": "~3.3.5"
+  },
+  "devDependencies": {
+    "font-awesome": "~4.3.0",
+    "angular-mocks": "~1.4.2"
   }
 }

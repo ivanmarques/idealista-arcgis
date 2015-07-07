@@ -47,7 +47,7 @@ exports.start = function(done)
 	app.use('/', router);
 	app.use("/build", express.static(__dirname + "/build"));
 	app.use("/img", express.static(__dirname + "/img"));
-	app.use("/css", express.static(__dirname + "/css"));
+	app.use("/styles", express.static(__dirname + "/styles"));
 	app.use("/js", express.static(__dirname + "/js"));
 	app.use("/bower_components", express.static(__dirname + "/bower_components"));
 

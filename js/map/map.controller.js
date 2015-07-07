@@ -90,13 +90,10 @@ angular.module('idealista-arcgis')
                 radius: 1000,
                 name: ""
             };
-            MapService.paintPoint(mapPoint, null, poi);
+            MapService.addPoint(mapPoint, null, poi);
             $scope.pois.push(poi);
             $scope.$apply();
         });
-
-
-
 
 
 
