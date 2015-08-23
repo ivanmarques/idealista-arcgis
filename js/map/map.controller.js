@@ -1,3 +1,4 @@
+'use strict';
 angular.module('idealista-arcgis')
     .controller('MapController', function ($scope, lodash, MapService, IdealistaService, $rootScope, $q) {
         //inicializamos el mapa pasándole el id del elemento donde se debe pintar
@@ -58,9 +59,7 @@ angular.module('idealista-arcgis')
             for(i=0; i<poisNum; i++)
             {
                 //$GEO.params.numPage = i;
-                setTimeout(function(i) {
-                    promises.push(IdealistaService.endpointRequest($scope.pois[i], $scope.idealista));
-                }, i*2000, i);
+                setTimeout(idealistaRequest(promises, i), i*2000, i);
             }
 
             setTimeout(function() {
@@ -74,12 +73,13 @@ angular.module('idealista-arcgis')
                     MapService.paintResults($scope.results);
                 },function(e){
                     alert("Ha sucedido un error al recuperar los pisos, por favor inténtalo de nuevo.");
+                    console.log(e);
                     $scope.waiting = false;
                     $scope.loadButton = "Buscar pisos";
                 });
             },poisNum*2000);
 
-        }
+        };
         //Broadcast Events
 
         $rootScope.$on('MAPClick', function(scope, mapPoint){
@@ -95,7 +95,9 @@ angular.module('idealista-arcgis')
             $scope.$apply();
         });
 
-
+        function idealistaRequest(promiseArray, poiIndex){
+          promiseArray.push(IdealistaService.endpointRequest($scope.pois[poiIndex], $scope.idealista));
+        }
 
         function makeResultArray(){
             var resultCollection = IdealistaService.joinResults(lodash.cloneDeep($scope.results), entireCollection);

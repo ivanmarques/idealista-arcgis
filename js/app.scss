@@ -1,0 +1,106 @@
+$icon-font-path: "/bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+$fa-font-path: "/bower_components/font-awesome/fonts";
+
+@import 'bootstrap-sass-official/assets/stylesheets/bootstrap';
+@import 'font-awesome/scss/font-awesome';
+
+// Component styles are injected through gulp
+// injector
+// endinjector
+
+
+body{font-family: 'Open Sans', sans-serif;}
+h1{
+  font-size: 1.7em;
+  margin-bottom: .5em;
+  font-weight: 300;
+}
+.unstyled{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#pois{
+  margin-bottom: 0;
+}
+#pois li{
+  position: relative;
+}
+#pois .fa-trash-o{  
+  padding: 9px;
+}
+#pois .form-group{
+  margin-bottom: 0;
+}
+#pois th{
+  font-size: .9em;
+}
+#pois td{
+  vertical-align: middle;
+}
+#pois th:nth-child(3n),
+#pois td:nth-child(3n){
+  width: 80px;
+}
+#filters{
+  border: 1px dotted #cfcfcf
+}
+#filters h2{
+  margin-bottom: 0.5em;
+  font-size: 20px;
+}
+
+.margin-top-05 { margin-top: 0.5em; }
+.margin-top-10 { margin-top: 1.0em; }
+.margin-top-15 { margin-top: 1.5em; }
+.margin-top-20 { margin-top: 2.0em; }
+.margin-top-25 { margin-top: 2.5em; }
+.margin-top-30 { margin-top: 3.0em; }
+
+.margin-bottom-05 { margin-bottom: 0.5em; }
+.margin-bottom-10 { margin-bottom: 1.0em; }
+.margin-bottom-15 { margin-bottom: 1.5em; }
+.margin-bottom-20 { margin-bottom: 2.0em; }
+.margin-bottom-25 { margin-bottom: 2.5em; }
+.margin-bottom-30 { margin-bottom: 3.0em; }
+
+#results li{
+  float: left;
+  margin-right: 2%;
+  margin-bottom: 10px;
+  width: 18.4%;
+}
+#results li:nth-child(5n){
+  margin-right: 0;
+}
+#results img{
+  width: 100%;
+  min-height: 85px;
+}
+
+.clickable{
+  color: #07F;
+  text-decoration: underline;
+  cursor: pointer
+}
+
+
+.thumbnail{
+  margin-bottom: .5em;
+}
+
+.image img {
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -o-transition: all 1s ease; /* IE 9 */
+    -ms-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+.image:hover img {
+    -webkit-transform:scale(2.25); /* Safari and Chrome */
+    -moz-transform:scale(2.25); /* Firefox */
+    -ms-transform:scale(2.25); /* IE 9 */
+    -o-transform:scale(2.25); /* Opera */
+     transform:scale(2.25);
+}
